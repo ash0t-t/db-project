@@ -9,7 +9,7 @@
     "start": "node dist/server.js",
     "prisma:migrate": "prisma migrate dev --name init --preview-feature",
     "prisma:generate": "prisma generate",
-    "seed:api": "ts-node src/seed-via-api.ts"
+    "seed:api": "tsx src/seed-via-api.ts"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +27,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
     "@types/node": "^24.10.1",
+    "@types/node-fetch": "^2.6.13",
     "prisma": "^7.0.1",
     "ts-node-dev": "^2.0.0",
     "tsx": "^4.20.6",
