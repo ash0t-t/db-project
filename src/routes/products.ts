@@ -15,7 +15,8 @@ export default function (prisma: PrismaClient) {
     const q = req.query;
     const where: any = {};
     if (q.name) where.fullName = { contains: String(q.name), mode: "insensitive" };
-    const list = await prisma.product.findMany({ where, orderBy: q.sort ? { [String(q.sort)]: "asc" } : undefined });
+    const orderBy = q.sort ? { [String(q.sort)]: q.order === "asc" ? "asc" : "desc" } : undefined;
+    const list = await prisma.product.findMany({ where, orderBy });
 
     res.json(list);
   });
