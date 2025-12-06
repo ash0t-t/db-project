@@ -18,15 +18,22 @@ model Product {
   unit          String?
   purchasePrice Float?
   shelfLifeDays Int?
+  category      String?
   supplies      Supply[]
+
+  @@index([shortName])
 }
 model Supply {
-  id         Int      @id @default(autoincrement())
-  enterprise Enterprise @relation(fields: [enterpriseId], references: [id])
+  id           Int      @id @default(autoincrement())
+  enterprise   Enterprise @relation(fields: [enterpriseId], references: [id])
   enterpriseId Int
-  product    Product   @relation(fields: [productId], references: [id])
-  productId  Int
-  date       DateTime
-  volume     Float
-  salePrice  Float?
+  product      Product   @relation(fields: [productId], references: [id])
+  productId    Int
+  date         DateTime
+  volume       Float
+  salePrice    Float?
+  batchNumber  String?
+
+  @@index([enterpriseId, productId])
+  @@index([date])
 }
