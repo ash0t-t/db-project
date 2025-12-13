@@ -20,23 +20,29 @@ export default function (prisma: PrismaClient) {
   router.get("/", async (req, res) => {
     const q = req.query;
     const where: any = {};
-
+  
     if (q.enterpriseId) where.enterpriseId = Number(q.enterpriseId);
     if (q.productId) where.productId = Number(q.productId);
-    if (q.dateFrom || q.dateTo) where.date = {};
-    if (q.dateFrom) where.date.gte = new Date(String(q.dateFrom));
-    if (q.dateTo) where.date.lte = new Date(String(q.dateTo));
-
+  
     const page = Number(q.page || 1);
     const perPage = Number(q.perPage || 20);
-    const list = await prisma.supply.findMany({
+  
+    const total = await prisma.supply.count({ where });
+  
+    const rows = await prisma.supply.findMany({
       where,
       skip: (page - 1) * perPage,
       take: perPage,
-      orderBy: q.sort ? { [String(q.sort)]: "asc" } : { date: "desc" }
+      orderBy: { date: "desc" }
     });
-
-    res.json(list);
+  
+    res.json({
+      page,
+      perPage,
+      total,
+      totalPages: Math.ceil(total / perPage),
+      data: rows
+    });
   });
 
   router.get("/advanced", async (req, res) => {

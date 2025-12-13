@@ -19,6 +19,7 @@ model Product {
   purchasePrice Float?
   shelfLifeDays Int?
   category      String?
+  meta          Json?
   supplies      Supply[]
 
   @@index([shortName])

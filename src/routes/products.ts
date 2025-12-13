@@ -21,6 +21,22 @@ export default function (prisma: PrismaClient) {
     res.json(list);
   });
 
+  router.get("/search/meta", async (req, res) => {
+    const pattern = String(req.query.q || "");
+    const rows = await prisma.$queryRaw`
+      SELECT *
+      FROM "Product"
+      WHERE meta::text ~ ${pattern}
+      ORDER BY id
+    `;
+
+    res.json(
+      JSON.parse(
+        JSON.stringify(rows, (_, v) => typeof v === "bigint" ? Number(v) : v)
+      )
+    );
+  });
+
   router.get("/:id", async (req, res) => {
     const id = Number(req.params.id);
     const item = await prisma.product.findUnique({ where: { id } });
